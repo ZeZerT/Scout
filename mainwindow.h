@@ -39,6 +39,7 @@ private slots:
     void on_checkBox_double_clicked();
     void viderLog();
     void credits();
+    void aide();
 
 private:
     Ui::MainWindow *ui;

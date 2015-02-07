@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UpdateBesoinDodo(false, 0);
     connect(ui->actionVider_le_log, SIGNAL(triggered()), this, SLOT(viderLog()));
     connect(ui->actionCredits, SIGNAL(triggered()), this, SLOT(credits()));
+    connect(ui->actionAide, SIGNAL(triggered()), this, SLOT(aide()));
 
 }
 
@@ -262,4 +263,8 @@ void MainWindow::credits(){
     msgBox.setTextFormat(Qt::RichText);
     msgBox.setText("Cet outil vise à aider les scouts sur le serveur Roche de l'Augure, de Guild Wars 2. <br>J'accepte et me soumets à tous les machins décrit ici : <a href='https://www.guildwars2.com/en/legal/guild-wars-2-content-terms-of-use/'>Terms of use</a>.<br>Un probleme ou une suggestion ? <A HREF='mailto:weird.industry.dev@gmail.com'>weird.industry.dev@gmail.com</a>.<br><hr>Outil réalisé sous <a href='http://qt-project.org/'>QT Créator</a>.<br>Par <i>Alexandre PONELLE</i>  <small>(Alias : <i>Weird Has Renamed)</i></small>");
     msgBox.exec();
+}
+
+void MainWindow::aide(){
+    QDesktopServices::openUrl(QUrl("http://auguryrock.com/forum/viewtopic.php?f=14&t=2828", QUrl::TolerantMode));
 }
