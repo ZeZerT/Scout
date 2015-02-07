@@ -9,9 +9,3 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-/* TODO
- *
- * Garder l'appli au premier plan
- * barre de chargement pour voir environ le %
- */
