@@ -37,9 +37,6 @@ private slots:
 
     void on_comboBox_Ravit_currentTextChanged(const QString &arg1);
     void on_checkBox_double_clicked();
-    /*void toggleTimers();
-    void toggleSimulation();
-    void toggleLog();*/
     void viderLog();
     void credits();
 

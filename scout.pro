@@ -21,3 +21,4 @@ SOURCES += \
     main.cpp
 
 RC_FILE +=  myapp.rc
+CONFIG += static

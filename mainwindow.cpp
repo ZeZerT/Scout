@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setFixedWidth(this->width());
 
-    if(QTime::currentTime().hour() <= 18) LogAction("Bonjour à toi, Scout !");
+    if((QTime::currentTime().hour() >=6) && (QTime::currentTime().hour()<=18)) LogAction("Bonjour à toi, Scout !");
     else LogAction("Bonsoir à toi, Scout !");
 
     nbDolyaksRestant = 0;
@@ -34,10 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     nbDolyaksTotal =6;
     UpdateBesoinDodo(false, 0);
-
-    /*connect(ui->actionTimers, SIGNAL(triggered()), this, SLOT(toggleTimers()));
-    connect(ui->actionSimulation, SIGNAL(triggered()), this, SLOT(toggleSimulation()));
-    connect(ui->actionLog, SIGNAL(triggered()), this, SLOT(toggleLog()));*/
     connect(ui->actionVider_le_log, SIGNAL(triggered()), this, SLOT(viderLog()));
     connect(ui->actionCredits, SIGNAL(triggered()), this, SLOT(credits()));
 
@@ -54,45 +50,6 @@ void MainWindow::on_pushButton_armes_clicked()
     ui->label_timer_armes->setStyleSheet("QLabel {color : black; }");
     LogAction("Armes reset.");
     a_start = true;
-}
-
-void MainWindow::update_armes(){
-    if(a_secondes == 0){
-        if(a_minutes != 0){
-            a_minutes--;
-            a_secondes = 59;
-        }
-    }else   a_secondes--;
-
-    if(ui->label_timer_armes->text() == "00:00"){
-        if(ui->actionPop_up_reset_des_armes->isChecked()){
-            if(a_start)QMessageBox::information( this, tr("Scout"), tr("Il faut reset les armes !"));
-        }else    if(a_start)ui->label_timer_armes->setStyleSheet("QLabel { background-color : red; color : blue; }");
-        a_start=false;
-    }
-
-    QString scnd = QString("%1").arg(a_secondes, 2, 10, QChar('0'));
-    QString min = QString("%1").arg(a_minutes, 2, 10, QChar('0'));
-    if(a_start)ui->label_timer_armes->setText(min+":"+scnd);
-}
-
-void MainWindow::update_camp(){
-    if(c_secondes == 0){
-        if(c_minutes != 0){
-            c_minutes--;
-            c_secondes = 59;
-        }
-    }else   c_secondes--;
-
-    if(ui->label_timer_camp->text() == "00:00"){
-        ui->label_timer_camp->setStyleSheet("QLabel { background-color : red; color : blue; }");
-        a_start=false;
-    }
-
-    QString scnd = QString("%1").arg(c_secondes, 2, 10, QChar('0'));
-    QString min = QString("%1").arg(c_minutes, 2, 10, QChar('0'));
-    if(c_start) ui->label_timer_camp->setText(min+":"+scnd);
-
 }
 
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
@@ -115,13 +72,6 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
         c_minutes += 2;  c_secondes += 30;
     }
     c_start = true;
-}
-
-void MainWindow::LogAction(QString message){
-    QString h = QString("%1").arg((QTime::currentTime().hour()), 2, 10, QChar('0'));
-    QString m = QString("%1").arg((QTime::currentTime().minute()), 2, 10, QChar('0'));
-    QString s = QString("%1").arg((QTime::currentTime().second()), 2, 10, QChar('0'));
-    ui->textEdit_log->append("["+h+":"+m+":"+s+"] "+message);
 }
 
 void MainWindow::on_comboBox_Type_currentTextChanged(const QString &arg1)
@@ -190,36 +140,6 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     value /= 100;
 
     UpdateBesoinDodo(false, value);
-
-    //LogAction(QString("%1").arg((value), 2, 10, QChar('0')));
-}
-
-void MainWindow::UpdateBesoinDodo(bool reset, int nbDodo){
-    bool continuer = true;
-    if(nbDodo==-1)  nbDolyaksRestant++;
-    if(nbDolyaksRestant > nbDolyaksTotal)continuer = false;
-    if(ui->checkBox_double->isChecked())  nbDolyaksRestant++;
-    if(reset)       nbDolyaksRestant =0;
-
-    /*
-    std::cout << "\nnbDolyaksRestant = "    << nbDolyaksRestant
-              << "\nnbDolyaksTotal = "      << nbDolyaksTotal
-              << "\ncontinuer = "           << continuer;
-    */
-
-    if(continuer){
-        if(nbDodo>-1)    nbDolyaksRestant = nbDodo;
-        QString unite = QString("%1").arg((nbDolyaksRestant), 2, 10, QChar('0'));
-        QString total = QString("%1").arg((nbDolyaksTotal), 2, 10, QChar('0'));
-
-        ui->label_dolyaks->setText(unite + "/" + total);
-        if(nbDolyaksRestant>=nbDolyaksTotal) ui->label_dolyaks->setText("GG!");
-    }
-}
-
-void MainWindow::on_pushButton_1Dolyak_clicked()
-{
-    UpdateBesoinDodo();
 }
 
 void MainWindow::on_comboBox_Ravit_currentTextChanged(const QString &arg1)
@@ -261,22 +181,75 @@ void MainWindow::on_checkBox_double_clicked()
     ui->pushButton_1Dolyak->setText("Dolyak simple");
     if(ui->checkBox_double->isChecked())ui->pushButton_1Dolyak->setText("Dolyak double");
 }
-/*
-void MainWindow::toggleTimers(){
-    int a, height;
-    ui->groupBox->geometry().getRect(&a, &a, &a, &height);
-    ui->groupBox->setVisible(ui->actionTimers->isChecked());
+
+void MainWindow::UpdateBesoinDodo(bool reset, int nbDodo){
+    bool continuer = true;
+    if(nbDodo==-1)  nbDolyaksRestant++;
+    if(nbDolyaksRestant > nbDolyaksTotal)continuer = false;
+    if(ui->checkBox_double->isChecked())  nbDolyaksRestant++;
+    if(reset)       nbDolyaksRestant =0;
+
+    if(continuer){
+        if(nbDodo>-1)    nbDolyaksRestant = nbDodo;
+        QString unite = QString("%1").arg((nbDolyaksRestant), 2, 10, QChar('0'));
+        QString total = QString("%1").arg((nbDolyaksTotal), 2, 10, QChar('0'));
+
+        ui->label_dolyaks->setText(unite + "/" + total);
+        if(nbDolyaksRestant>=nbDolyaksTotal) ui->label_dolyaks->setText("GG!");
+    }
 }
 
-void MainWindow::toggleSimulation(){
-    ui->groupBox_2->setVisible(ui->actionSimulation->isChecked());
-    this->setMaximumHeight(this->height() - ui->groupBox_2->height());
-    this->setMinimumHeight(this->height() - ui->groupBox_2->height());
+
+void MainWindow::on_pushButton_1Dolyak_clicked()
+{
+    UpdateBesoinDodo();
 }
 
-void MainWindow::toggleLog(){
-    ui->textEdit_log->setVisible(ui->actionLog->isChecked());
-}*/
+void MainWindow::update_armes(){
+    if(a_secondes == 0){
+        if(a_minutes != 0){
+            a_minutes--;
+            a_secondes = 59;
+        }
+    }else   a_secondes--;
+
+    if(ui->label_timer_armes->text() == "00:00"){
+        if(ui->actionPop_up_reset_des_armes->isChecked()){
+            if(a_start)QMessageBox::information( this, tr("Scout"), tr("Il faut reset les armes !"));
+        }else    if(a_start)ui->label_timer_armes->setStyleSheet("QLabel { background-color : red; color : blue; }");
+        a_start=false;
+    }
+
+    QString scnd = QString("%1").arg(a_secondes, 2, 10, QChar('0'));
+    QString min = QString("%1").arg(a_minutes, 2, 10, QChar('0'));
+    if(a_start)ui->label_timer_armes->setText(min+":"+scnd);
+}
+
+void MainWindow::update_camp(){
+    if(c_secondes == 0){
+        if(c_minutes != 0){
+            c_minutes--;
+            c_secondes = 59;
+        }
+    }else   c_secondes--;
+
+    if(ui->label_timer_camp->text() == "00:00"){
+        ui->label_timer_camp->setStyleSheet("QLabel { background-color : red; color : blue; }");
+        a_start=false;
+    }
+
+    QString scnd = QString("%1").arg(c_secondes, 2, 10, QChar('0'));
+    QString min = QString("%1").arg(c_minutes, 2, 10, QChar('0'));
+    if(c_start) ui->label_timer_camp->setText(min+":"+scnd);
+
+}
+
+void MainWindow::LogAction(QString message){
+    QString h = QString("%1").arg((QTime::currentTime().hour()), 2, 10, QChar('0'));
+    QString m = QString("%1").arg((QTime::currentTime().minute()), 2, 10, QChar('0'));
+    QString s = QString("%1").arg((QTime::currentTime().second()), 2, 10, QChar('0'));
+    ui->textEdit_log->append("["+h+":"+m+":"+s+"] "+message);
+}
 
 void MainWindow::viderLog(){
     ui->textEdit_log->clear();
@@ -286,7 +259,7 @@ void MainWindow::viderLog(){
 void MainWindow::credits(){
     QMessageBox msgBox(this);
     msgBox.setWindowTitle("About..");
-    msgBox.setTextFormat(Qt::RichText);   //this is what makes the links clickable
-    msgBox.setText("Cet outil vise à aider les scouts sur le serveur Roche de l'Augure, de Guild Wars 2. <br>J'accepte et me soumets à tous les machins décrit ici : <a href='https://www.guildwars2.com/en/legal/guild-wars-2-content-terms-of-use/'>Terms of use</a>.<br>Un probleme ou une suggestion ? <A HREF='mailto:weird.industry.dev@gmail.comweird.industry.dev@gmail.com'>weird.industry.dev@gmail.com</a>.<br><hr>Outil réalisé sous <a href='http://qt-project.org/'>QT Créator</a>.<br>Par <i>Alexandre PONELLE</i>  <small>(Alias : <i>Weird Has Renamed)</i></small>");
+    msgBox.setTextFormat(Qt::RichText);
+    msgBox.setText("Cet outil vise à aider les scouts sur le serveur Roche de l'Augure, de Guild Wars 2. <br>J'accepte et me soumets à tous les machins décrit ici : <a href='https://www.guildwars2.com/en/legal/guild-wars-2-content-terms-of-use/'>Terms of use</a>.<br>Un probleme ou une suggestion ? <A HREF='mailto:weird.industry.dev@gmail.com'>weird.industry.dev@gmail.com</a>.<br><hr>Outil réalisé sous <a href='http://qt-project.org/'>QT Créator</a>.<br>Par <i>Alexandre PONELLE</i>  <small>(Alias : <i>Weird Has Renamed)</i></small>");
     msgBox.exec();
 }
