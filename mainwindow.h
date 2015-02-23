@@ -1,14 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTimer>
 #include <QTime>
+#include <QTimer>
 #include <QWidget>
-#include <QtCore/qmath.h>
 #include <iostream>
+#include <QMainWindow>
 #include <QMessageBox>
+#include <QtCore/qmath.h>
 #include <QDesktopServices>
+#include <QtMultimedia/QSound>
 
 namespace Ui {
 class MainWindow;

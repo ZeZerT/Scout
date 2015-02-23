@@ -110,7 +110,7 @@
            <item>
             <widget class="QLabel" name="label_timer_armes">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;45:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;35:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -325,10 +325,19 @@
    </property>
    <widget class="QMenu" name="menuAffichage">
     <property name="title">
-     <string>Affichage</string>
+     <string>Options</string>
     </property>
+    <widget class="QMenu" name="menuAlarme_sonore">
+     <property name="title">
+      <string>Alarme sonore</string>
+     </property>
+     <addaction name="actionAucune"/>
+     <addaction name="actionCoucou"/>
+     <addaction name="actionDring"/>
+    </widget>
     <addaction name="separator"/>
     <addaction name="actionPop_up_reset_des_armes"/>
+    <addaction name="menuAlarme_sonore"/>
    </widget>
    <widget class="QMenu" name="menuLog">
     <property name="title">
@@ -415,6 +424,21 @@
   <action name="actionCredits">
    <property name="text">
     <string>À propos..</string>
+   </property>
+  </action>
+  <action name="actionAucune">
+   <property name="text">
+    <string>Aucune </string>
+   </property>
+  </action>
+  <action name="actionCoucou">
+   <property name="text">
+    <string>Coucou</string>
+   </property>
+  </action>
+  <action name="actionDring">
+   <property name="text">
+    <string>Dring</string>
    </property>
   </action>
  </widget>

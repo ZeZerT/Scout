@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(a_timer, SIGNAL(timeout()), this, SLOT(update_armes()));
     connect(c_timer, SIGNAL(timeout()), this, SLOT(update_camp()));
 
-    a_start = false;    a_minutes = 45;     a_secondes = 0;     a_timer->start(1000);
+    a_start = false;    a_minutes = 35;     a_secondes = 0;     a_timer->start(1000);
     c_start = false;    c_minutes = 5;      c_secondes = 0;     c_timer->start(1000);
 
     nbDolyaksRavit = 35;
@@ -33,11 +33,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox_Ravit->setItemText(5, "Mortiers");
 
     nbDolyaksTotal =6;
-    UpdateBesoinDodo(false, 0);
+    UpdateBesoinDodo(true);
     connect(ui->actionVider_le_log, SIGNAL(triggered()), this, SLOT(viderLog()));
     connect(ui->actionCredits, SIGNAL(triggered()), this, SLOT(credits()));
     connect(ui->actionAide, SIGNAL(triggered()), this, SLOT(aide()));
 
+    QActionGroup* groupAlarme = new QActionGroup( this );
+    ui->actionAucune->setCheckable(true);   ui->actionAucune->setActionGroup(groupAlarme);  ui->actionAucune->setChecked(true);
+    ui->actionCoucou->setCheckable(true);   ui->actionCoucou->setActionGroup(groupAlarme);
+    ui->actionDring->setCheckable(true);    ui->actionDring->setActionGroup(groupAlarme);
 }
 
 MainWindow::~MainWindow()
@@ -47,7 +51,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_armes_clicked()
 {
-    a_start = false;    a_minutes = 45;     a_secondes = 0;
+    a_start = false;    a_minutes = 35;     a_secondes = 0;
     ui->label_timer_armes->setStyleSheet("QLabel {color : black; }");
     LogAction("Armes reset.");
     a_start = true;
@@ -79,32 +83,39 @@ void MainWindow::on_comboBox_Type_currentTextChanged(const QString &arg1)
 {
     if(arg1 == "Tour"){
         nbDolyaksRavit = 35;
+        ui->comboBox_Ravit->setItemText(0, "trololololol...");
         ui->comboBox_Ravit->setItemText(0, "T1");         //200
         ui->comboBox_Ravit->setItemText(1, "T2");         //400
         ui->comboBox_Ravit->setItemText(2, "T3");         //800
         ui->comboBox_Ravit->setItemText(3, "Huile");      //100
         ui->comboBox_Ravit->setItemText(4, "Canons");     //200
         ui->comboBox_Ravit->setItemText(5, "Mortiers");   //400
+        ui->comboBox_Ravit->setCurrentIndex(0);
+
     }
 
     if(arg1 == "Fort"){
         nbDolyaksRavit = 70;
+        ui->comboBox_Ravit->setItemText(0, "...lolololol...");
         ui->comboBox_Ravit->setItemText(0, "T1");         //500
         ui->comboBox_Ravit->setItemText(1, "T2");         //1000
         ui->comboBox_Ravit->setItemText(2, "T3");         //2000
         ui->comboBox_Ravit->setItemText(3, "Canons");     //400
         ui->comboBox_Ravit->setItemText(4, "Mortiers");   //800
         ui->comboBox_Ravit->setItemText(5, "TP");         //1600
+        ui->comboBox_Ravit->setCurrentIndex(0);
     }
 
     if(arg1 == "Château"){
         nbDolyaksRavit = 80;
+        ui->comboBox_Ravit->setItemText(0, "...lololololol.");
         ui->comboBox_Ravit->setItemText(0, "T1");         //1000
         ui->comboBox_Ravit->setItemText(1, "T2");         //2000
         ui->comboBox_Ravit->setItemText(2, "T3");         //4000
         ui->comboBox_Ravit->setItemText(3, "Canons");     //750
         ui->comboBox_Ravit->setItemText(4, "Mortiers");   //1500
         ui->comboBox_Ravit->setItemText(5, "TP");         //3000
+        ui->comboBox_Ravit->setCurrentIndex(0);
     }
 }
 
@@ -140,7 +151,7 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     value *= dodoNecessaire;
     value /= 100;
 
-    UpdateBesoinDodo(false, value);
+    UpdateBesoinDodo(true, value);
 }
 
 void MainWindow::on_comboBox_Ravit_currentTextChanged(const QString &arg1)
@@ -196,10 +207,13 @@ void MainWindow::UpdateBesoinDodo(bool reset, int nbDodo){
         QString total = QString("%1").arg((nbDolyaksTotal), 2, 10, QChar('0'));
 
         ui->label_dolyaks->setText(unite + "/" + total);
-        if(nbDolyaksRestant>=nbDolyaksTotal) ui->label_dolyaks->setText("GG!");
+
+        if(nbDolyaksRestant >= nbDolyaksTotal){
+            nbDolyaksRestant = nbDolyaksTotal;
+            ui->label_dolyaks->setText("GG!");
+        }
     }
 }
-
 
 void MainWindow::on_pushButton_1Dolyak_clicked()
 {
@@ -214,10 +228,23 @@ void MainWindow::update_armes(){
         }
     }else   a_secondes--;
 
+
+    QSound QSound_coucou("coucou.wav");
+    QSound QSound_dring("dring.wav");
     if(ui->label_timer_armes->text() == "00:00"){
         if(ui->actionPop_up_reset_des_armes->isChecked()){
-            if(a_start)QMessageBox::information( this, tr("Scout"), tr("Il faut reset les armes !"));
-        }else    if(a_start)ui->label_timer_armes->setStyleSheet("QLabel { background-color : red; color : blue; }");
+            if(a_start) if(ui->actionCoucou->isChecked()){
+                QSound_coucou.setLoops(QSound::Infinite);
+                QSound_coucou.play();
+            }
+            if(a_start) if(ui->actionDring->isChecked()){
+                QSound_dring.setLoops(QSound::Infinite);
+                QSound_dring.play();
+            }
+            if(a_start) QMessageBox::information( this, tr("Scout"), tr("Il faut reset les armes !"));
+            QSound_coucou.stop();   QSound_dring.stop();
+
+        }else   if(a_start)ui->label_timer_armes->setStyleSheet("QLabel { background-color : red; color : blue; }");
         a_start=false;
     }
 
