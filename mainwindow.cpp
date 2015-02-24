@@ -76,6 +76,7 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
         ui->label_timer_camp->setText("07:30");
         c_minutes += 2;  c_secondes += 30;
     }
+    ui->comboBox->setCurrentIndex(0);
     c_start = true;
 }
 
@@ -263,7 +264,7 @@ void MainWindow::update_camp(){
 
     if(ui->label_timer_camp->text() == "00:00"){
         ui->label_timer_camp->setStyleSheet("QLabel { background-color : red; color : blue; }");
-        a_start=false;
+        c_start=false;
     }
 
     QString scnd = QString("%1").arg(c_secondes, 2, 10, QChar('0'));

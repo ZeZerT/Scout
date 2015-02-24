@@ -75,6 +75,11 @@
             <widget class="QComboBox" name="comboBox">
              <item>
               <property name="text">
+               <string>En cours ..</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>UP 100</string>
               </property>
              </item>
