@@ -60,21 +60,25 @@ void MainWindow::on_pushButton_armes_clicked()
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
     c_start = false;
-    c_minutes = 5;  c_secondes = 0;
     ui->label_timer_camp->setStyleSheet("QLabel {color : black; }");
 
     if(arg1 == "UP 100"){
         ui->label_timer_camp->setText("05:00");
         LogAction("Amélioration à 100 de ravit lancé.");
+        std::cout << "blabla1" << c_minutes << ":" << c_secondes << std::endl;
+        c_minutes = 5;  c_secondes = 0;
     }
     if(arg1 == "Camp buff"){
         ui->label_timer_camp->setText("05:00");
         LogAction("Le camp a été reset.");
+        std::cout << "blabla2" << c_minutes << ":" << c_secondes << std::endl;
+        c_minutes = 5;  c_secondes = 0;
     }
     if(arg1 == "UP 150"){
-        LogAction("Amélioration à 150 de ravit lancé.");
         ui->label_timer_camp->setText("07:30");
-        c_minutes += 2;  c_secondes += 30;
+        LogAction("Amélioration à 150 de ravit lancé.");
+        c_minutes = 7;  c_secondes = 30;
+        std::cout << "blabla3" << c_minutes << ":" << c_secondes << std::endl;
     }
     ui->comboBox->setCurrentIndex(0);
     c_start = true;
